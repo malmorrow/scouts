@@ -3,6 +3,8 @@ import datetime
 from django.db import models
 from django.utils import timezone
 
+from phonenumber_field.modelfields import PhoneNumberField
+
 class Province(models.Model):
     name = models.CharField(max_length=50)
 
@@ -16,12 +18,18 @@ class District(models.Model):
     def __str__(self):
         return self.name
 
+class Branch(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
 class Group(models.Model):
     district = models.ForeignKey(District)
     name = models.CharField(max_length=200)
     start_date = models.DateField(default=datetime.date.today)
     end_date = models.DateField(default=None, blank=True, null=True)
-    mal = models.CharField(max_length=2)
+    branches = models.ManyToManyField(Branch)
 
     def is_active(self):
         return self.end_date is None or self.end_date < timezone.now()
@@ -33,30 +41,21 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
-class Branch(models.Model):
-    BROWNIE = 'BR'
-    CUB = 'CU'
-    GUIDE = 'GU'
-    SCOUT = 'SC'
-    BRANCH_CHOICES = (
-        (BROWNIE, 'Brownie'),
-        (CUB, 'Cub'),
-        (GUIDE, 'Guide'),
-        (SCOUT, 'Scout'),
-    )
-
 class Ward(models.Model):
     group = models.ForeignKey(Group)
     first_names = models.CharField(max_length=200)
     surname = models.CharField(max_length=50)
-    branch = models.CharField(max_length=2, choices=Branch.BRANCH_CHOICES, default=Branch.CUB)
+    # Filters to be provided that restrict Ward's branch to those available via the Group
+    branch = models.ForeignKey(Branch)
     application_date = models.DateField(default=datetime.date.today)
-    sa_id_number = models.CharField(max_length=10)
+    sa_id_number = models.CharField(max_length=13)
     date_of_birth = models.DateField(default=datetime.date.today)
     email = models.EmailField()
+    # research good types for this, includes postcode
+    residential_address = models.CharField(max_length=200)
+    home_phone = PhoneNumberField()
     """
     signatory_parent # FK onto either parent_1 or parent_2 below
-    residential_address # research good types for this, includes postcode
     home_phone # if not provided, mobile_phone must be provided
     mobile_phone # if not provided, home_phone must be provided
     sex # male or female enum
@@ -76,3 +75,6 @@ class Ward(models.Model):
 
     def initials(self):
         pass
+
+    def __str__(self):
+        return self.first_names + ' ' + self.surname
