@@ -1,0 +1,9 @@
+{% if group_list %}
+    <ul>
+    {% for group in group_list %}
+        <li><a href="/scout/{{ group.id }}/">{{ group.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>There are no groups to be joined in your area.</p>
+{% endif %}
