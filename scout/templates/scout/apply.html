@@ -1,1 +1,11 @@
-Hello.
+<h1>Apply to join the Scouts</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="application.html" method="post">
+{% csrf_token %}
+
+{{ form }}
+
+    <input type="submit" value="Submit" />
+</form>
