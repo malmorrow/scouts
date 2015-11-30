@@ -4,4 +4,4 @@ from .models import Ward
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Ward
-        fields = ['first_names', 'surname', 'group', 'branch', 'sa_id_number', 'date_of_birth', 'email', 'residential_address', 'home_phone']
+        fields = ['first_names', 'surname', 'application_date', 'group', 'branch', 'sa_id_number', 'date_of_birth', 'email', 'residential_address', 'home_phone']

@@ -2,10 +2,11 @@
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="application.html" method="post">
+<form action="{% url 'scout:application' %}" method="post">
 {% csrf_token %}
 
-{{ form }}
-
+    <table>
+    {{ form.as_table }}
+    </table>
     <input type="submit" value="Submit" />
 </form>
