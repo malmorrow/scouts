@@ -1,5 +1,5 @@
 # scouts
-This is a web application for a Cub Akela who is annoyed by paperwork. He wants to run Cubs, he doesn't really want to do more than the minimum, and easiest, amount of admin. The application ought to support the following:
+This is a web application for a Cub Akela who is frustrated by paperwork. He wants to run Cubs, he doesn't really want to do more than the minimum, and easiest, amount of admin. The application ought to support the following:
 
 1. Parents can sign-up their kids, generate the application form, sign it, scan it, and dispatch it to the Akela.
 2. The Akela admits the Cub.  This distributes the starting pack of information to the parents and the new Cub, and forwards the application form and other documents to the Scout Province.
