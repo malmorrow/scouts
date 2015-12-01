@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from .models import Group, Ward
-from .forms import ApplicationForm
+from .forms import ParentForm, WardForm
 
 def index(request):
     group_list = Group.objects.order_by('name')
@@ -15,45 +15,31 @@ def index(request):
     return render(request, 'scout/index.html', context)
 
 def apply(request):
-    if request.method == 'POST':
-        form = ApplicationForm(request.POST)
-        if form.is_valid():
-            ward = Ward()
-            ward.group = form.cleaned_data['group']
-            ward.first_names = form.cleaned_data['first_names']
-            ward.surname = form.cleaned_data['surname']
-            ward.branch = form.cleaned_data['branch']
-            ward.application_date = form.cleaned_data['application_date']
-            ward.sa_id_number = form.cleaned_data['sa_id_number']
-            ward.date_of_birth = form.cleaned_data['date_of_birth']
-            ward.email = form.cleaned_data['email']
-            ward.residential_address = form.cleaned_data['residential_address']
-            ward.home_phone = form.cleaned_data['home_phone']
-            ward.save()
-            return HttpResponseRedirect(reverse('scout:apply'))
-    else:
-        form = ApplicationForm()
-
-    return render(request, 'scout/apply.html', {'form': form})
+    return render(request, 'scout/apply.html', {
+        'ward_form': WardForm(),
+        'parent1_form': ParentForm(),
+        'parent2_form': ParentForm(),
+    })
 
 def application(request):
     if request.method == 'POST':
-        form = ApplicationForm(request.POST)
-        if form.is_valid():
+        ward_form = WardForm(request.POST)
+        if ward_form.is_valid():
             ward = Ward()
-            ward.group = form.cleaned_data['group']
-            ward.first_names = form.cleaned_data['first_names']
-            ward.surname = form.cleaned_data['surname']
-            ward.branch = form.cleaned_data['branch']
-            ward.application_date = form.cleaned_data['application_date']
-            ward.sa_id_number = form.cleaned_data['sa_id_number']
-            ward.date_of_birth = form.cleaned_data['date_of_birth']
-            ward.email = form.cleaned_data['email']
-            ward.residential_address = form.cleaned_data['residential_address']
-            ward.home_phone = form.cleaned_data['home_phone']
+            ward.group = ward_form.cleaned_data['group']
+            ward.first_names = ward_form.cleaned_data['first_names']
+            ward.surname = ward_form.cleaned_data['surname']
+            ward.branch = ward_form.cleaned_data['branch']
+            ward.application_date = ward_form.cleaned_data['application_date']
+            ward.sa_id_number = ward_form.cleaned_data['sa_id_number']
+            ward.date_of_birth = ward_form.cleaned_data['date_of_birth']
+            ward.email = ward_form.cleaned_data['email']
+            ward.residential_address = ward_form.cleaned_data['residential_address']
+            ward.home_phone = ward_form.cleaned_data['home_phone']
             ward.save()
-            #return HttpResponseRedirect(reverse('scout:apply'))
-    return HttpResponse("Completed application.")
+            return HttpResponse("Completed application.")
+        else:
+            return HttpResponse("Invalid application.")
 
 def ward(request, ward_id):
     child = get_object_or_404(Ward, pk=ward_id)

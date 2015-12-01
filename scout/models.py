@@ -41,6 +41,49 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+class Person:
+    FEMALE = 'F'
+    MALE = 'M'
+    SEX_CHOICES = (
+        (FEMALE, 'Female'),
+        (MALE, 'Male'),
+    )
+
+    SINGLE = 'SI'
+    MARRIED = 'MA'
+    PARTNERSHIP = 'PA'
+    CIVIL_UNION = 'CI'
+    DIVORCED = 'DI'
+    SEPARATED = 'SE'
+    WIDOWED = 'WI'
+    MARITAL_CHOICES = (
+        (SINGLE, 'Single'),
+        (MARRIED, 'Married'),
+        (PARTNERSHIP, 'Partnership'),
+        (CIVIL_UNION, 'Civil union'),
+        (DIVORCED, 'Divorced'),
+        (SEPARATED, 'Separated'),
+        (WIDOWED, 'Widowed'),
+    )
+
+class Doctor(models.Model):
+    name = models.CharField(max_length=200)
+    work_phone = PhoneNumberField()
+
+class Parent(models.Model):
+    first_names = models.CharField(max_length=200)
+    surname = models.CharField(max_length=50)
+    sa_id_number = models.CharField(max_length=13)
+    date_of_birth = models.DateField()
+    postal_address = models.CharField(max_length=200)
+    work_phone = PhoneNumberField()
+    cell_phone = PhoneNumberField()
+    email = models.EmailField()
+    sex = models.CharField(max_length=1, choices=Person.SEX_CHOICES, default=Person.FEMALE)
+    marital_status = models.CharField(max_length=2, choices=Person.MARITAL_CHOICES, default=Person.SINGLE)
+    occupation = models.CharField(max_length=50)
+    employer = models.CharField(max_length=50)
+
 class Ward(models.Model):
     group = models.ForeignKey(Group)
     first_names = models.CharField(max_length=200)
@@ -51,9 +94,19 @@ class Ward(models.Model):
     sa_id_number = models.CharField(max_length=13)
     date_of_birth = models.DateField(default=datetime.date.today)
     email = models.EmailField()
+    sex = models.CharField(max_length=1, choices=Person.SEX_CHOICES, default=Person.FEMALE)
     # research good types for this, includes postcode
     residential_address = models.CharField(max_length=200)
     home_phone = PhoneNumberField()
+    cell_phone = PhoneNumberField()
+    religious_denomination = models.CharField(max_length=100)
+    special_conditions = models.CharField(max_length=200)
+    doctor = models.ForeignKey(Doctor)
+    medical_aid_scheme = models.CharField(max_length=50)
+    medical_aid_number = models.CharField(max_length=20)
+    medical_aid_principal_member = models.CharField(max_length=200)
+    parent1 = models.ForeignKey(Parent, related_name='%(class)s_parent1')
+    parent2 = models.ForeignKey(Parent, related_name='%(class)s_parent2')
     """
     signatory_parent # FK onto either parent_1 or parent_2 below
     home_phone # if not provided, mobile_phone must be provided

@@ -6,7 +6,9 @@
 {% csrf_token %}
 
     <table>
-    {{ form.as_table }}
+    {{ ward_form.as_table }}
+    {{ parent1_form.as_table }}
+    {{ parent2_form.as_table }}
     </table>
     <input type="submit" value="Submit" />
 </form>
