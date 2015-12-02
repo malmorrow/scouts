@@ -71,6 +71,9 @@ class Doctor(models.Model):
     name = models.CharField(max_length=200)
     work_phone = PhoneNumberField()
 
+    def __str__(self):
+        return self.name
+
 class Parent(models.Model):
     first_names = models.CharField(max_length=200)
     surname = models.CharField(max_length=50)
@@ -86,7 +89,7 @@ class Parent(models.Model):
     employer = models.CharField(max_length=50)
 
     def get_absolute_url(self):
-        return reverse('parent-detail', kwargs={'pk': self.pk})
+        return reverse('scout:parent-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.first_names + ' ' + self.surname
@@ -114,6 +117,9 @@ class Ward(models.Model):
     medical_aid_principal_member = models.CharField(max_length=200)
     parent1 = models.ForeignKey(Parent, related_name='%(class)s_parent1')
     parent2 = models.ForeignKey(Parent, related_name='%(class)s_parent2')
+
+    def get_absolute_url(self):
+        return reverse('scout:ward-detail', kwargs={'pk': self.pk})
 
     def first_name(self):
         return hasattr(self, 'preferred_first_name') and self.preferred_first_name or self.first_names.split()[:1]

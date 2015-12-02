@@ -55,3 +55,8 @@ class ParentDetail(DetailView):
     template_name="scout/parent_detail.html"
     context_object_name = 'parent'
     queryset = Parent.objects.all()
+
+class WardDetail(DetailView):
+    template_name="scout/ward_detail.html"
+    context_object_name = 'ward'
+    queryset = Ward.objects.all()
