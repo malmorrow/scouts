@@ -1,10 +1,17 @@
 import datetime
 
+from django.http import HttpResponse
+from django.template import RequestContext, loader
+from django.utils import timezone
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView
-from django.utils import timezone
 
 from .models import Parent, Group, Ward
+
+def index(request):
+    template = loader.get_template('scout/index.html')
+    context = RequestContext(request, {})
+    return HttpResponse(template.render(context))
 
 class CreateParent(CreateView):
     model = Parent
