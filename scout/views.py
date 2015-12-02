@@ -1,49 +1,57 @@
 import datetime
 
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.views.generic import DetailView
+from django.views.generic.edit import CreateView
 
-from .models import Group, Ward
-from .forms import ParentForm, WardForm
+from .models import Parent, Group, Ward
 
-def index(request):
-    group_list = Group.objects.order_by('name')
-    context = {
-        'group_list': group_list,
-    }
-    return render(request, 'scout/index.html', context)
+class CreateParent(CreateView):
+    model = Parent
+    fields = [
+        'first_names',
+        'surname',
+        'sa_id_number',
+        'date_of_birth',
+        'postal_address',
+        'work_phone',
+        'cell_phone',
+        'email',
+        'sex',
+        'marital_status',
+        'occupation',
+        'employer',
+    ]
 
-def apply(request):
-    return render(request, 'scout/apply.html', {
-        'ward_form': WardForm(),
-        'parent1_form': ParentForm(),
-        'parent2_form': ParentForm(),
-    })
+class CreateWard(CreateView):
+    model = Ward
+    fields = [
+        'group',
+        'first_names',
+        'surname',
+        'branch',
+        'application_date',
+        'sa_id_number',
+        'date_of_birth',
+        'email',
+        'sex',
+        'residential_address',
+        'home_phone',
+        'cell_phone',
+        'religious_denomination',
+        'special_conditions',
+        'doctor',
+        'medical_aid_scheme',
+        'medical_aid_number',
+        'medical_aid_principal_member',
+        'parent1',
+        'parent2',
+    ]
 
-def application(request):
-    if request.method == 'POST':
-        ward_form = WardForm(request.POST)
-        if ward_form.is_valid():
-            ward = Ward()
-            ward.group = ward_form.cleaned_data['group']
-            ward.first_names = ward_form.cleaned_data['first_names']
-            ward.surname = ward_form.cleaned_data['surname']
-            ward.branch = ward_form.cleaned_data['branch']
-            ward.application_date = ward_form.cleaned_data['application_date']
-            ward.sa_id_number = ward_form.cleaned_data['sa_id_number']
-            ward.date_of_birth = ward_form.cleaned_data['date_of_birth']
-            ward.email = ward_form.cleaned_data['email']
-            ward.residential_address = ward_form.cleaned_data['residential_address']
-            ward.home_phone = ward_form.cleaned_data['home_phone']
-            ward.save()
-            return HttpResponse("Completed application.")
-        else:
-            return HttpResponse("Invalid application.")
+class ParentDetail(DetailView):
+    model = Parent
+    def get_context_data(self, **kwargs):
+        context = super(ParentDetail, self).get_context_data(**kwargs)
 
-def ward(request, ward_id):
-    child = get_object_or_404(Ward, pk=ward_id)
-    return render(request, 'scout/ward.html', {'ward': child})
+        context['book_list'] = Book.objects.all()
+        return context
 
-def update(request, ward_id):
-    return HttpResponse("Update application for child %s." % ward_id)

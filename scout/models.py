@@ -84,6 +84,9 @@ class Parent(models.Model):
     occupation = models.CharField(max_length=50)
     employer = models.CharField(max_length=50)
 
+    def get_absolute_url(self):
+        return "/parent/%i/" % self.id
+
 class Ward(models.Model):
     group = models.ForeignKey(Group)
     first_names = models.CharField(max_length=200)
