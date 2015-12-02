@@ -2,11 +2,14 @@ import datetime
 
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView
+from django.utils import timezone
 
 from .models import Parent, Group, Ward
 
 class CreateParent(CreateView):
     model = Parent
+    # template_name can be set as a parameter to .as_view() in urls.py, same syntax.  Not yet clear to me which arrangement would be better.
+    template_name = 'scout/parent_create.html'
     fields = [
         'first_names',
         'surname',
@@ -24,6 +27,7 @@ class CreateParent(CreateView):
 
 class CreateWard(CreateView):
     model = Ward
+    template_name="scout/ward_create.html"
     fields = [
         'group',
         'first_names',
@@ -48,10 +52,6 @@ class CreateWard(CreateView):
     ]
 
 class ParentDetail(DetailView):
-    model = Parent
-    def get_context_data(self, **kwargs):
-        context = super(ParentDetail, self).get_context_data(**kwargs)
-
-        context['book_list'] = Book.objects.all()
-        return context
-
+    template_name="scout/parent_detail.html"
+    context_object_name = 'parent'
+    queryset = Parent.objects.all()
