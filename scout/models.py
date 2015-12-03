@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -75,6 +76,7 @@ class Doctor(models.Model):
         return self.name
 
 class Parent(models.Model):
+    user = models.OneToOneField(User)
     first_names = models.CharField(max_length=200)
     surname = models.CharField(max_length=50)
     sa_id_number = models.CharField(max_length=13)
@@ -95,6 +97,7 @@ class Parent(models.Model):
         return self.first_names + ' ' + self.surname
 
 class Ward(models.Model):
+    user = models.OneToOneField(User)
     group = models.ForeignKey(Group)
     first_names = models.CharField(max_length=200)
     surname = models.CharField(max_length=50)
