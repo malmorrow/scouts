@@ -1,8 +1,15 @@
 {% block content %}
-	<ul>
-		<li>{{ ward.user.first_name }} {{ ward.user.last_name }}</li>
-    	<li>{{ ward.sa_id_number }}</li>
-    	<li>{{ ward.parent1 }}</li>
-    	<li>{{ ward.parent2 }}</li>
-    </ul>
+	<table>
+		<tr><td><strong>Name:</strong></td><td>{{ ward.user.first_name }} {{ ward.user.last_name }}</td></tr>
+    	<tr><td><strong>ID number:</strong></td><td>{{ ward.sa_id_number }}</td></tr>
+    	<tr><td><strong>Sex:</strong></td><td>{{ ward.sex }}</td></tr>
+    	<tr><td><strong>Parent:</strong></td><td>{{ ward.parent1 }}</td></tr>
+    	<tr><td><strong>Parent:</strong></td><td>{{ ward.parent2 }}</td></tr>
+    	<tr><td><strong>Username:</strong></td><td>{{ ward.user.username }}</td></tr>
+    	<tr><td><strong>Group:</strong></td><td>{{ ward.group }}</td></tr>
+    	<tr><td><strong>Branch:</strong></td><td>{{ ward.branch }}</td></tr>
+    	<tr><td><strong>Home phone:</strong></td><td>{{ ward.home_phone }}</td></tr>
+    	<tr><td><strong>Cell phone:</strong></td><td>{{ ward.cell_phone }}</td></tr>
+    	<tr><td><strong>Email:</strong></td><td>{{ ward.user.email }}</td></tr>
+    </table>
 {% endblock %}
