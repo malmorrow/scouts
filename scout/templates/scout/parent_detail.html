@@ -1,6 +1,6 @@
 {% block content %}
 	<ul>
-		<li>{{ parent.first_names }} {{ parent.surname }}</li>
+		<li>{{ parent.user.first_name }} {{ parent.user.last_name }}</li>
     	<li>{{ parent.sa_id_number }}</li>
     </ul>
 {% endblock %}

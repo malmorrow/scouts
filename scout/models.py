@@ -96,14 +96,11 @@ class Parent(models.Model):
 class Ward(models.Model):
     user = models.OneToOneField(User)
     group = models.ForeignKey(Group)
-    first_names = models.CharField(max_length=200)
-    surname = models.CharField(max_length=50)
     # Filters to be provided that restrict Ward's branch to those available via the Group
     branch = models.ForeignKey(Branch)
     application_date = models.DateField(default=datetime.date.today)
     sa_id_number = models.CharField(max_length=13)
     date_of_birth = models.DateField(default=datetime.date.today)
-    email = models.EmailField()
     sex = models.CharField(max_length=1, choices=Person.SEX_CHOICES, default=Person.FEMALE)
     # research good types for this, includes postcode
     residential_address = models.CharField(max_length=200)
@@ -122,11 +119,10 @@ class Ward(models.Model):
         return reverse('scout:ward-detail', kwargs={'pk': self.pk})
 
     def first_name(self):
-        return hasattr(self, 'preferred_first_name') and self.preferred_first_name or self.first_names.split()[:1]
-    first_name.admin_order_field = 'first_names'
+        return hasattr(self, 'preferred_first_name') and self.preferred_first_name or self.user.first_name.split()[:1]
 
     def initials(self):
         pass
 
     def __str__(self):
-        return self.first_names + ' ' + self.surname
+        return self.user.first_name + ' ' + self.user.last_name

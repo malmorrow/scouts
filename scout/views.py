@@ -7,7 +7,6 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext, loader
 from django.utils import timezone
 from django.views.generic import DetailView
-from django.views.generic.edit import CreateView
 from django.core.urlresolvers import reverse
 
 from .models import Parent, Group, Ward
@@ -31,8 +30,6 @@ class CreateUserForm(ModelForm):
 class CreateParentForm(ModelForm):
     class Meta:
         model = Parent
-        # template_name can be set as a parameter to .as_view() in urls.py, same syntax.  Not yet clear to me which arrangement would be better.
-        template_name = 'scout/parent_create.html'
         fields = [
             'sa_id_number',
             'date_of_birth',
@@ -61,35 +58,51 @@ def add_parent(request):
         uform = CreateUserForm()
         pform = CreateParentForm()
     return render_to_response(
-            'scout/parent_create.html',
+            'scout/parent_detail.html',
             {'uform': uform, 'pform': pform, 'success': success},
             context)
 
-class CreateWard(CreateView):
-    model = Ward
-    template_name="scout/ward_create.html"
-    fields = [
-        'group',
-        'first_names',
-        'surname',
-        'branch',
-        'application_date',
-        'sa_id_number',
-        'date_of_birth',
-        'email',
-        'sex',
-        'residential_address',
-        'home_phone',
-        'cell_phone',
-        'religious_denomination',
-        'special_conditions',
-        'doctor',
-        'medical_aid_scheme',
-        'medical_aid_number',
-        'medical_aid_principal_member',
-        'parent1',
-        'parent2',
-    ]
+class CreateWardForm(ModelForm):
+    class Meta:
+        model = Ward
+        fields = [
+            'group',
+            'branch',
+            'application_date',
+            'sa_id_number',
+            'date_of_birth',
+            'sex',
+            'residential_address',
+            'home_phone',
+            'cell_phone',
+            'religious_denomination',
+            'special_conditions',
+            'doctor',
+            'medical_aid_scheme',
+            'medical_aid_number',
+            'medical_aid_principal_member',
+            'parent1',
+            'parent2',
+        ]
+
+def add_ward(request):
+    context = RequestContext(request)
+    success = False
+    if request.method == "POST":
+        uform = CreateUserForm(data = request.POST)
+        wform = CreateWardForm(data = request.POST)
+        if uform.is_valid() and wform.is_valid():
+            user = uform.save()
+            profile = wform.save(commit = False)
+            profile.user = user
+            profile.save()
+    else:
+        uform = CreateUserForm()
+        wform = CreateWardForm()
+    return render_to_response(
+            'scout/ward_detail.html',
+            {'uform': uform, 'wform': wform, 'success': success},
+            context)
 
 class ParentDetail(DetailView):
     template_name="scout/parent_detail.html"
