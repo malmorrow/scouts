@@ -50,17 +50,14 @@ def add_parent(request):
         pform = CreateParentForm(data = request.POST)
         if uform.is_valid() and pform.is_valid():
             user = uform.save()
-            profile = pform.save(commit = False)
-            profile.user = user
-            profile.save()
-            x = profile.id
+            parent = pform.save(commit = False)
+            parent.user = user
+            parent.save()
+            return render_to_response('scout/parent_detail.html', {'parent': parent}, context)
     else:
         uform = CreateUserForm()
         pform = CreateParentForm()
-    return render_to_response(
-            'scout/parent_detail.html',
-            {'uform': uform, 'pform': pform, 'success': success},
-            context)
+    return render_to_response('scout/parent_create.html', {'uform': uform, 'pform': pform, 'success': success}, context)
 
 class CreateWardForm(ModelForm):
     class Meta:
@@ -93,16 +90,14 @@ def add_ward(request):
         wform = CreateWardForm(data = request.POST)
         if uform.is_valid() and wform.is_valid():
             user = uform.save()
-            profile = wform.save(commit = False)
-            profile.user = user
-            profile.save()
+            ward = wform.save(commit = False)
+            ward.user = user
+            ward.save()
+        return render_to_response('scout/ward_detail.html', {'ward': ward}, context)
     else:
         uform = CreateUserForm()
         wform = CreateWardForm()
-    return render_to_response(
-            'scout/ward_detail.html',
-            {'uform': uform, 'wform': wform, 'success': success},
-            context)
+    return render_to_response('scout/ward_create.html', {'uform': uform, 'wform': wform, 'success': success}, context)
 
 class ParentDetail(DetailView):
     template_name="scout/parent_detail.html"
