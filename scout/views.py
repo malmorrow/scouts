@@ -12,9 +12,7 @@ from django.core.urlresolvers import reverse
 from .models import Parent, Group, Ward
 
 def index(request):
-    template = loader.get_template('scout/index.html')
-    context = RequestContext(request, {})
-    return HttpResponse(template.render(context))
+    return render_to_response('scout/index.html', {}, RequestContext(request, {}))
 
 class CreateUserForm(ModelForm):
     class Meta:

@@ -1,6 +1,6 @@
--f /usr/share/pip-wheels
 Babel==2.1.1
 Django==1.8.7
+django-bootstrap-themes==3.1.2
 django-phonenumber-field==1.0.0
 phonenumbers==7.1.1
 pytz==2015.7
