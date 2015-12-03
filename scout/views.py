@@ -34,14 +34,11 @@ class CreateParentForm(ModelForm):
         # template_name can be set as a parameter to .as_view() in urls.py, same syntax.  Not yet clear to me which arrangement would be better.
         template_name = 'scout/parent_create.html'
         fields = [
-            'first_names',
-            'surname',
             'sa_id_number',
             'date_of_birth',
             'postal_address',
             'work_phone',
             'cell_phone',
-            'email',
             'sex',
             'marital_status',
             'occupation',

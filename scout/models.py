@@ -77,14 +77,11 @@ class Doctor(models.Model):
 
 class Parent(models.Model):
     user = models.OneToOneField(User)
-    first_names = models.CharField(max_length=200)
-    surname = models.CharField(max_length=50)
     sa_id_number = models.CharField(max_length=13)
     date_of_birth = models.DateField()
     postal_address = models.CharField(max_length=200)
     work_phone = PhoneNumberField()
     cell_phone = PhoneNumberField()
-    email = models.EmailField()
     sex = models.CharField(max_length=1, choices=Person.SEX_CHOICES, default=Person.FEMALE)
     marital_status = models.CharField(max_length=2, choices=Person.MARITAL_CHOICES, default=Person.SINGLE)
     occupation = models.CharField(max_length=50)
@@ -94,7 +91,7 @@ class Parent(models.Model):
         return reverse('scout:parent-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return self.first_names + ' ' + self.surname
+        return self.user.first_name + ' ' + self.user.last_name
 
 class Ward(models.Model):
     user = models.OneToOneField(User)
